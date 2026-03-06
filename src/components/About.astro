@@ -1,0 +1,62 @@
+---
+interface Props {
+  image?: string;
+  imageAlt?: string;
+}
+
+const {
+  image = "https://images.unsplash.com/photo-1588075592446-265fd1e6e76f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+  imageAlt = "Educator engaging with children in learning activities",
+} = Astro.props;
+---
+
+<section id="about">
+  <div class="container">
+    <div class="section-header">
+      <h2>Why Irvine Families Choose World Of Explorers Academy</h2>
+      <p class="section-description">
+        Working parents in Irvine deserve more than just supervision for their children.
+        At World Of Explorers Academy (W.O.E. Academy), we provide a nurturing environment
+        where your child develops critical life skills, explores their interests, and builds lasting friendships.
+      </p>
+    </div>
+    <div class="about-grid">
+      <div class="rounded-image">
+        <img src={image} alt={imageAlt} loading="lazy" />
+      </div>
+      <div class="about-card">
+        <h3>"Where Curious Kids Become Confident Learners"</h3>
+        <p>Our mission is to create a safe, engaging space where children can explore, learn, and grow at their own pace. We believe every child has unique potential waiting to be discovered through hands-on learning, creative play, and supportive guidance.</p>
+        <div class="about-features">
+          <div class="feature-item">
+            <span class="checkmark">✓</span>
+            <p>Individual attention with low student-to-teacher ratios</p>
+          </div>
+          <div class="feature-item">
+            <span class="checkmark">✓</span>
+            <p>Curriculum designed for holistic development</p>
+          </div>
+          <div class="feature-item">
+            <span class="checkmark">✓</span>
+            <p>Safe, clean, and stimulating learning environments</p>
+          </div>
+        </div>
+        <a href="#contact" class="btn-primary">Learn More About Us</a>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">15+</div>
+        <div>Years of Experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">500+</div>
+        <div>Happy Families</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">100%</div>
+        <div>Licensed & Insured</div>
+      </div>
+    </div>
+  </div>
+</section>

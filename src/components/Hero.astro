@@ -1,0 +1,71 @@
+---
+interface Props {
+  headline?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+}
+
+const {
+  headline = "Irvine's Premier Childcare & Afterschool Program Where Your Child's Potential Comes to Life",
+  description = "Serving families in Irvine, Tustin Ranch & Woodbridge with enriching full-day care, afterschool programs, and seasonal camps for ages 2-12 years. Licensed, safe, and focused on building confident, curious learners.",
+  image = "https://images.unsplash.com/photo-1587616211892-f743fcca64f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+  imageAlt = "Children playing with educator",
+} = Astro.props;
+---
+
+<section id="home" class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div>
+        <h1>{headline}</h1>
+        <p>{description}</p>
+        <form class="email-form" id="hero-form">
+          <input type="email" name="email" placeholder="Enter your email" required />
+          <button type="submit" class="btn-primary">Schedule a Visit</button>
+        </form>
+        <div class="trust-indicators">
+          <div class="trust-item">
+            <span class="checkmark">✓</span>
+            <span>CA Licensed Facility</span>
+          </div>
+          <div class="trust-item">
+            <span class="checkmark">✓</span>
+            <span>Ages 2-12 Years</span>
+          </div>
+          <div class="trust-item">
+            <span class="checkmark">✓</span>
+            <span>Flexible Scheduling</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src={image} alt={imageAlt} loading="eager" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('hero-form') as HTMLFormElement;
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+
+    // MailerLite subscriber signup
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        form.innerHTML = '<p style="color: #14b8a6; font-weight: 600;">✓ You\'re on the list! We\'ll be in touch soon.</p>';
+      } else {
+        alert('Something went wrong. Please try again.');
+      }
+    } catch {
+      alert('Something went wrong. Please try again.');
+    }
+  });
+</script>

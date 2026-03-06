@@ -1,0 +1,187 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { sanityClient, queries, urlFor } from '../../lib/sanity';
+import { PortableText } from '@portabletext/react';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const post = await sanityClient.fetch(queries.postBySlug, { slug });
+
+if (!post) {
+  return Astro.redirect('/blog');
+}
+---
+
+<Layout
+  title={`${post.title} | W.O.E. Academy Blog`}
+  description={post.excerpt ?? `Read ${post.title} on the W.O.E. Academy blog.`}
+>
+  <Header />
+  <main>
+    <article class="blog-post">
+      {post.mainImage && (
+        <div class="blog-post-hero-image">
+          <img
+            src={urlFor(post.mainImage).width(1200).height(500).fit('crop').url()}
+            alt={post.mainImage.alt ?? post.title}
+            loading="eager"
+          />
+        </div>
+      )}
+
+      <div class="container">
+        <div class="blog-post-header">
+          <a href="/blog" class="back-link">← Back to Blog</a>
+          {post.publishedAt && (
+            <p class="blog-post-meta">
+              {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+              {post.estimatedReadingTime && (
+                <span> · {post.estimatedReadingTime} min read</span>
+              )}
+            </p>
+          )}
+          <h1>{post.title}</h1>
+          {post.excerpt && <p class="blog-post-excerpt">{post.excerpt}</p>}
+        </div>
+
+        <div class="blog-post-content portable-text" id="blog-body" data-body={JSON.stringify(post.body)}>
+          <!-- Rendered client-side via PortableText -->
+        </div>
+
+        <div class="blog-post-footer">
+          <a href="/blog" class="btn-secondary">← Back to Blog</a>
+        </div>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  // Lightweight portable text renderer (avoids React dependency)
+  function renderBlocks(blocks: any[]): string {
+    if (!blocks) return '';
+    return blocks.map((block) => {
+      if (block._type === 'image') {
+        return `<figure class="blog-image">
+          <img src="${block.asset?._ref ?? ''}" alt="${block.alt ?? ''}" loading="lazy" />
+          ${block.caption ? `<figcaption>${block.caption}</figcaption>` : ''}
+        </figure>`;
+      }
+      if (block._type !== 'block') return '';
+
+      const text = (block.children ?? [])
+        .map((span: any) => {
+          let t = span.text ?? '';
+          if (span.marks?.includes('strong')) t = `<strong>${t}</strong>`;
+          if (span.marks?.includes('em')) t = `<em>${t}</em>`;
+          if (span.marks?.includes('underline')) t = `<u>${t}</u>`;
+          if (span.marks?.includes('code')) t = `<code>${t}</code>`;
+          return t;
+        })
+        .join('');
+
+      const style = block.style ?? 'normal';
+      if (style === 'h2') return `<h2>${text}</h2>`;
+      if (style === 'h3') return `<h3>${text}</h3>`;
+      if (style === 'h4') return `<h4>${text}</h4>`;
+      if (style === 'blockquote') return `<blockquote>${text}</blockquote>`;
+      if (!text.trim()) return '';
+      return `<p>${text}</p>`;
+    }).join('\n');
+  }
+
+  const container = document.getElementById('blog-body') as HTMLElement;
+  if (container) {
+    try {
+      const body = JSON.parse(container.dataset.body ?? '[]');
+      container.innerHTML = renderBlocks(body);
+    } catch {
+      // fail silently
+    }
+  }
+</script>
+
+<style>
+  .blog-post-hero-image {
+    width: 100%;
+    max-height: 500px;
+    overflow: hidden;
+  }
+  .blog-post-hero-image img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+  }
+  .back-link {
+    display: inline-block;
+    color: #14b8a6;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: #0d9488; }
+  .blog-post-meta {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+  }
+  .blog-post-excerpt {
+    font-size: 1.2rem;
+    color: #475569;
+    line-height: 1.7;
+    margin-top: 1rem;
+    font-style: italic;
+  }
+  .blog-post-footer {
+    margin: 4rem 0 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+  }
+  .btn-secondary {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    border: 2px solid #14b8a6;
+    color: #14b8a6;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #14b8a6;
+    color: white;
+  }
+
+  /* Portable text content styles */
+  .portable-text h2 { font-size: 1.75rem; color: #0f172a; margin: 2rem 0 1rem; }
+  .portable-text h3 { font-size: 1.35rem; color: #0f172a; margin: 1.5rem 0 0.75rem; }
+  .portable-text h4 { font-size: 1.1rem; color: #0f172a; margin: 1.25rem 0 0.5rem; }
+  .portable-text p { color: #334155; line-height: 1.8; margin-bottom: 1.25rem; }
+  .portable-text blockquote {
+    border-left: 4px solid #14b8a6;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    color: #475569;
+    font-style: italic;
+    font-size: 1.1rem;
+  }
+  .portable-text code {
+    background: #f1f5f9;
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+    font-family: monospace;
+    font-size: 0.9em;
+  }
+  .blog-image { margin: 2rem 0; }
+  .blog-image img { width: 100%; border-radius: 0.75rem; }
+  .blog-image figcaption { text-align: center; color: #64748b; font-size: 0.875rem; margin-top: 0.5rem; }
+</style>
