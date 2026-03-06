@@ -1,10 +1,14 @@
 ---
 interface Props {
+  heading?: string;
+  description?: string;
   image?: string;
   imageAlt?: string;
 }
 
 const {
+  heading = "Why Irvine Families Choose World Of Explorers Academy",
+  description = "Working parents in Irvine deserve more than just supervision for their children. At World Of Explorers Academy (W.O.E. Academy), we provide a nurturing environment where your child develops critical life skills, explores their interests, and builds lasting friendships.",
   image = "https://images.unsplash.com/photo-1588075592446-265fd1e6e76f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   imageAlt = "Educator engaging with children in learning activities",
 } = Astro.props;
@@ -13,12 +17,8 @@ const {
 <section id="about">
   <div class="container">
     <div class="section-header">
-      <h2>Why Irvine Families Choose World Of Explorers Academy</h2>
-      <p class="section-description">
-        Working parents in Irvine deserve more than just supervision for their children.
-        At World Of Explorers Academy (W.O.E. Academy), we provide a nurturing environment
-        where your child develops critical life skills, explores their interests, and builds lasting friendships.
-      </p>
+      <h2>{heading}</h2>
+      <p class="section-description">{description}</p>
     </div>
     <div class="about-grid">
       <div class="rounded-image">

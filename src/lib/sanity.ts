@@ -48,6 +48,7 @@ export const queries = {
     phone,
     email,
     address,
-    serviceAreas
+    serviceAreas,
+    hours
   }`,
 };

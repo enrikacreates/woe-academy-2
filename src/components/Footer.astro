@@ -1,5 +1,17 @@
 ---
 import Logo from './Logo.astro';
+
+interface Props {
+  phone?: string;
+  email?: string;
+  address?: string;
+}
+
+const {
+  phone = "(949) 555-0123",
+  email = "info@woeacademy.com",
+  address = "Serving Irvine, Tustin Ranch\n& Woodbridge, CA",
+} = Astro.props;
 ---
 
 <footer>
@@ -38,10 +50,9 @@ import Logo from './Logo.astro';
       <div>
         <h4>Contact</h4>
         <ul class="footer-text">
-          <li>Serving Irvine, Tustin Ranch</li>
-          <li>& Woodbridge, CA</li>
-          <li>(949) 555-0123</li>
-          <li>info@woeacademy.com</li>
+          {address.split('\n').map((line: string) => <li>{line}</li>)}
+          <li>{phone}</li>
+          <li>{email}</li>
         </ul>
       </div>
     </div>

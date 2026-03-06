@@ -6,7 +6,18 @@ import About from '../components/About.astro';
 import Programs from '../components/Programs.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+import { sanityClient, urlFor, queries } from '../lib/sanity';
 
+const settings = await sanityClient.fetch(queries.siteSettings);
+
+// Build image URLs from Sanity if available
+const heroImage = settings?.heroImage ? urlFor(settings.heroImage).width(1080).quality(80).url() : undefined;
+const aboutImage = settings?.aboutImage ? urlFor(settings.aboutImage).width(1080).quality(80).url() : undefined;
+
+// Format address for footer (multiline)
+const footerAddress = settings?.address
+  ? `${settings.address}${settings.serviceAreas ? '\n' + settings.serviceAreas : ''}`
+  : undefined;
 ---
 
 <Layout
@@ -15,10 +26,27 @@ import Footer from '../components/Footer.astro';
 >
   <Header />
   <main>
-    <Hero />
-    <About />
+    <Hero
+      headline={settings?.heroHeadline}
+      description={settings?.heroDescription}
+      image={heroImage}
+    />
+    <About
+      heading={settings?.aboutHeading}
+      description={settings?.aboutDescription}
+      image={aboutImage}
+    />
     <Programs />
-    <Contact />
+    <Contact
+      phone={settings?.phone}
+      email={settings?.email}
+      address={settings?.address}
+      hours={settings?.hours}
+    />
   </main>
-  <Footer />
+  <Footer
+    phone={settings?.phone}
+    email={settings?.email}
+    address={footerAddress}
+  />
 </Layout>

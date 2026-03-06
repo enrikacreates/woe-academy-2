@@ -1,4 +1,17 @@
 ---
+interface Props {
+  phone?: string;
+  email?: string;
+  address?: string;
+  hours?: string;
+}
+
+const {
+  phone = "(949) 555-0123",
+  email = "info@woeacademy.com",
+  address = "Irvine, Tustin Ranch & Woodbridge, CA",
+  hours = "Monday - Friday: 6:30 AM - 6:30 PM\nSaturday - Sunday: Closed",
+} = Astro.props;
 ---
 
 <section id="contact">
@@ -19,7 +32,7 @@
           </div>
           <div class="contact-details">
             <h3>Locations We Serve</h3>
-            <p>Irvine, Tustin Ranch & Woodbridge<br>Irvine, CA</p>
+            <p>{address}</p>
           </div>
         </div>
         <div class="contact-item">
@@ -30,8 +43,7 @@
           </div>
           <div class="contact-details">
             <h3>Phone</h3>
-            <p>(949) 555-0123</p>
-            <p class="small">Mon-Fri, 6:30 AM - 6:30 PM</p>
+            <p>{phone}</p>
           </div>
         </div>
         <div class="contact-item">
@@ -43,8 +55,7 @@
           </div>
           <div class="contact-details">
             <h3>Email</h3>
-            <p>info@woeacademy.com</p>
-            <p class="small">We respond within 24 hours</p>
+            <p>{email}</p>
           </div>
         </div>
         <div class="contact-item">
@@ -56,7 +67,7 @@
           </div>
           <div class="contact-details">
             <h3>Operating Hours</h3>
-            <p>Monday - Friday: 6:30 AM - 6:30 PM<br>Saturday - Sunday: Closed</p>
+            <p set:html={hours.replace(/\n/g, '<br>')} />
           </div>
         </div>
         <div class="trust-badge">
