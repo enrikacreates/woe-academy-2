@@ -4,6 +4,9 @@ interface Props {
   email?: string;
   address?: string;
   hours?: string;
+  sectionLabel?: string;
+  sectionHeading?: string;
+  sectionDescription?: string;
 }
 
 const {
@@ -11,15 +14,18 @@ const {
   email = "info@woeacademy.com",
   address = "Irvine, Tustin Ranch & Woodbridge, CA",
   hours = "Monday - Friday: 6:30 AM - 6:30 PM\nSaturday - Sunday: Closed",
+  sectionLabel = "Ready to Get Started?",
+  sectionHeading = "Visit Our Academy Today",
+  sectionDescription = "Schedule a tour to see our facilities, meet our educators, and discover how World Of Explorers Academy can support your child's growth and development.",
 } = Astro.props;
 ---
 
 <section id="contact">
   <div class="container">
     <div class="section-header">
-      <p class="section-label">Ready to Get Started?</p>
-      <h2>Visit Our Academy Today</h2>
-      <p class="section-description">Schedule a tour to see our facilities, meet our educators, and discover how World Of Explorers Academy can support your child's growth and development.</p>
+      <p class="section-label">{sectionLabel}</p>
+      <h2>{sectionHeading}</h2>
+      <p class="section-description">{sectionDescription}</p>
     </div>
     <div class="contact-grid">
       <div class="contact-info">

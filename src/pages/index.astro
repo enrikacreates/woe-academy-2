@@ -30,18 +30,35 @@ const footerAddress = settings?.address
       headline={settings?.heroHeadline}
       description={settings?.heroDescription}
       image={heroImage}
+      buttonText={settings?.heroButtonText}
+      trustIndicators={settings?.heroTrustIndicators}
     />
     <About
       heading={settings?.aboutHeading}
       description={settings?.aboutDescription}
       image={aboutImage}
+      missionQuote={settings?.aboutMissionQuote}
+      missionStatement={settings?.aboutMissionStatement}
+      features={settings?.aboutFeatures}
+      buttonText={settings?.aboutButtonText}
+      stats={settings?.aboutStats}
     />
-    <Programs />
+    <Programs
+      sectionLabel={settings?.programsSectionLabel}
+      sectionHeading={settings?.programsSectionHeading}
+      sectionDescription={settings?.programsSectionDescription}
+      featureCards={settings?.programsFeatureCards}
+      subheading={settings?.programsSubheading}
+      programItems={settings?.programItems}
+    />
     <Contact
       phone={settings?.phone}
       email={settings?.email}
       address={settings?.address}
       hours={settings?.hours}
+      sectionLabel={settings?.contactSectionLabel}
+      sectionHeading={settings?.contactSectionHeading}
+      sectionDescription={settings?.contactSectionDescription}
     />
   </main>
   <Footer

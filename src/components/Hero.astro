@@ -4,6 +4,8 @@ interface Props {
   description?: string;
   image?: string;
   imageAlt?: string;
+  buttonText?: string;
+  trustIndicators?: { text: string }[];
 }
 
 const {
@@ -11,6 +13,12 @@ const {
   description = "Serving families in Irvine, Tustin Ranch & Woodbridge with enriching full-day care, afterschool programs, and seasonal camps for ages 2-12 years. Licensed, safe, and focused on building confident, curious learners.",
   image = "https://images.unsplash.com/photo-1587616211892-f743fcca64f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   imageAlt = "Children playing with educator",
+  buttonText = "Schedule a Visit",
+  trustIndicators = [
+    { text: "CA Licensed Facility" },
+    { text: "Ages 2-12 Years" },
+    { text: "Flexible Scheduling" },
+  ],
 } = Astro.props;
 ---
 
@@ -22,21 +30,15 @@ const {
         <p>{description}</p>
         <form class="email-form" id="hero-form">
           <input type="email" name="email" placeholder="Enter your email" required />
-          <button type="submit" class="btn-primary">Schedule a Visit</button>
+          <button type="submit" class="btn-primary">{buttonText}</button>
         </form>
         <div class="trust-indicators">
-          <div class="trust-item">
-            <span class="checkmark">✓</span>
-            <span>CA Licensed Facility</span>
-          </div>
-          <div class="trust-item">
-            <span class="checkmark">✓</span>
-            <span>Ages 2-12 Years</span>
-          </div>
-          <div class="trust-item">
-            <span class="checkmark">✓</span>
-            <span>Flexible Scheduling</span>
-          </div>
+          {trustIndicators.map((item) => (
+            <div class="trust-item">
+              <span class="checkmark">✓</span>
+              <span>{item.text}</span>
+            </div>
+          ))}
         </div>
       </div>
       <div class="hero-image">
