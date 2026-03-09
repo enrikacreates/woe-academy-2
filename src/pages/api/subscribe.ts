@@ -26,6 +26,9 @@ export const POST: APIRoute = async ({ request }) => {
       },
       body: JSON.stringify({
         email,
+        fields: {
+          z_u_source: 'hero_signup',
+        },
         groups: groupId ? [groupId] : [],
         status: 'active',
       }),
