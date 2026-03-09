@@ -6,8 +6,8 @@ export const POST: APIRoute = async ({ request }) => {
   const data = await request.json();
   const { name, email, phone, childAge, message } = data;
 
-  if (!name || !email || !message) {
-    return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
+  if (!name || !email) {
+    return new Response(JSON.stringify({ error: 'Name and email are required' }), { status: 400 });
   }
 
   const apiKey = import.meta.env.MAILERLITE_API_KEY;
@@ -27,19 +27,19 @@ Phone: ${phone ?? 'Not provided'}
 Child's Age: ${childAge ?? 'Not provided'}
 
 Message:
-${message}
+${message ?? 'No additional message'}
   `.trim();
 
   try {
-    // Send transactional email via MailerLite
-    const res = await fetch('https://connect.mailerlite.com/api/campaigns', {
+    // Send notification email via MailerLite campaign
+    const campaignRes = await fetch('https://connect.mailerlite.com/api/campaigns', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        name: `Contact Form - ${name} - ${new Date().toISOString().split('T')[0]}`,
+        name: `Tour Request - ${name} - ${new Date().toISOString().split('T')[0]}`,
         type: 'regular',
         emails: [
           {
@@ -53,9 +53,11 @@ ${message}
       }),
     });
 
-    // Note: MailerLite campaigns aren't the best for transactional email.
-    // For a simpler approach, we just add the contact as a subscriber with a note.
-    // The academy can view new leads in their MailerLite dashboard.
+    if (!campaignRes.ok) {
+      console.error('MailerLite campaign error:', await campaignRes.text());
+    }
+
+    // Add as subscriber so leads appear in MailerLite dashboard
     const subRes = await fetch('https://connect.mailerlite.com/api/subscribers', {
       method: 'POST',
       headers: {
@@ -67,7 +69,7 @@ ${message}
         fields: {
           name,
           phone: phone ?? '',
-          last_name: `[Tour Request] Age: ${childAge ?? 'N/A'}`,
+          last_name: childAge ? `[Tour] Age: ${childAge}` : '[Tour Request]',
         },
         status: 'active',
       }),

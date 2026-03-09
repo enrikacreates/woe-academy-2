@@ -4,12 +4,18 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  url?: string;
 }
 
 const {
-  title = "World Of Explorers Academy - Irvine's Premier Childcare & Afterschool Program",
+  title = "World Of Explorers Academy | Irvine's Premier Childcare & Afterschool Program",
   description = "Serving families in Irvine, Tustin Ranch & Woodbridge with enriching full-day care, afterschool programs, and seasonal camps for ages 2-12 years.",
+  image,
+  url = "https://woeacademy.com",
 } = Astro.props;
+
+const ogImage = image ?? `${url}/og-default.png`;
 ---
 
 <!doctype html>
@@ -20,6 +26,20 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph / Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="World Of Explorers Academy" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
   </head>
   <body>
     <slot />

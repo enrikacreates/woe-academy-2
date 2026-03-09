@@ -98,8 +98,18 @@ const {
             <input type="tel" id="phone" name="phone" required placeholder="(949) 555-0123" />
           </div>
           <div class="form-group">
-            <label for="message">Tell us about your child</label>
-            <textarea id="message" name="message" rows="4" placeholder="Child's age, program interests, preferred schedule..."></textarea>
+            <label for="childAge">Child's Age</label>
+            <select id="childAge" name="childAge">
+              <option value="">Select age range...</option>
+              <option value="2-3">2–3 years</option>
+              <option value="4-5">4–5 years</option>
+              <option value="6-8">6–8 years</option>
+              <option value="9-12">9–12 years</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Anything else we should know?</label>
+            <textarea id="message" name="message" rows="3" placeholder="Program interests, preferred schedule, questions..."></textarea>
           </div>
           <button type="submit" class="btn-primary form-submit">Request a Tour</button>
           <p class="form-disclaimer">By submitting this form, you agree to be contacted by World Of Explorers Academy.</p>
