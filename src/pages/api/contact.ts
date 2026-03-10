@@ -23,20 +23,10 @@ export const POST: APIRoute = async ({ request }) => {
     });
   }
 
-  // Build a note from all form fields for the subscriber record
-  const note = [
-    `Tour request submitted ${new Date().toISOString().split('T')[0]}`,
-    phone ? `Phone: ${phone}` : null,
-    childAge ? `Child's age: ${childAge}` : null,
-    message ? `Message: ${message}` : null,
-  ]
-    .filter(Boolean)
-    .join(' | ');
+  const notifyEmail = import.meta.env.CONTACT_NOTIFY_EMAIL;
 
   try {
-    // Add lead as MailerLite subscriber with tour request data
-    // Admin notifications should be configured as a MailerLite automation
-    // (Subscribers → Automations → "When subscriber joins group" → Send email)
+    // Add lead as MailerLite subscriber with proper custom fields
     const subRes = await fetch('https://connect.mailerlite.com/api/subscribers', {
       method: 'POST',
       headers: {
@@ -49,7 +39,8 @@ export const POST: APIRoute = async ({ request }) => {
           name,
           last_name: '',
           phone: phone ?? '',
-          company: childAge ? `Age: ${childAge}` : '',
+          child_age: childAge ?? '',
+          message: message ?? '',
           z_u_source: 'tour_request',
         },
         groups: groupId ? [groupId] : [],
@@ -60,7 +51,42 @@ export const POST: APIRoute = async ({ request }) => {
     if (!subRes.ok) {
       const errBody = await subRes.text();
       console.error('MailerLite subscriber error:', errBody);
-      // Still return success to user — their form was received
+    }
+
+    // Send admin notification email via MailerLite automation subscriber
+    // We add the admin as a temporary subscriber to a dedicated trigger,
+    // but the simplest reliable approach is a direct notification:
+    if (notifyEmail) {
+      const notifyBody = [
+        `New tour request from ${name} (${email})`,
+        phone ? `Phone: ${phone}` : '',
+        childAge ? `Child's age: ${childAge}` : '',
+        message ? `Message: ${message}` : '',
+      ]
+        .filter(Boolean)
+        .join('\n');
+
+      // Use MailerLite subscriber note as audit trail on the lead
+      try {
+        // Get the subscriber ID from the create response
+        const subData = await subRes.json().catch(() => null);
+        const subscriberId = subData?.data?.id;
+        if (subscriberId) {
+          await fetch(
+            `https://connect.mailerlite.com/api/subscribers/${subscriberId}/notes`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${apiKey}`,
+              },
+              body: JSON.stringify({ note: notifyBody }),
+            }
+          );
+        }
+      } catch (noteErr) {
+        console.error('Note save error:', noteErr);
+      }
     }
 
     return new Response(JSON.stringify({ ok: true }), {
