@@ -3,7 +3,7 @@
   "redirects": [
     {
       "source": "/studio",
-      "destination": "https://woe-academy-2.sanity.studio/",
+      "destination": "https://woe-academy.sanity.studio/",
       "permanent": false
     }
   ]
