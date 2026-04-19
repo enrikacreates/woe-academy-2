@@ -10,9 +10,8 @@ import { urlFor, getChromeProps } from '../lib/sanity';
 
 const { settings, headerProps, footerProps } = await getChromeProps();
 
-// Build image URLs from Sanity if available
-const heroImage = settings?.heroImage ? urlFor(settings.heroImage).width(1080).quality(80).url() : undefined;
-const aboutImage = settings?.aboutImage ? urlFor(settings.aboutImage).width(1080).quality(80).url() : undefined;
+const heroImage = settings?.heroImage ? urlFor(settings.heroImage).width(1080).quality(80).auto('format').url() : undefined;
+const aboutImage = settings?.aboutImage ? urlFor(settings.aboutImage).width(1080).quality(80).auto('format').url() : undefined;
 ---
 
 <Layout

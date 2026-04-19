@@ -24,7 +24,7 @@ const u = <T>(v: T | null | undefined): T | undefined => {
 
 export async function getChromeProps() {
   const settings = await sanityClient.fetch(queries.siteSettings);
-  const logoImage = settings?.logo ? urlFor(settings.logo).width(200).quality(90).url() : undefined;
+  const logoImage = settings?.logo ? urlFor(settings.logo).width(200).quality(90).auto('format').url() : undefined;
   const footerAddress = settings?.address
     ? `${settings.address}${settings.serviceAreas ? '\n' + settings.serviceAreas : ''}`
     : undefined;
@@ -57,7 +57,6 @@ export async function getChromeProps() {
   };
 }
 
-// GROQ queries
 export const queries = {
   allPosts: `*[_type == "blogPost"] | order(publishedAt desc) {
     _id,
