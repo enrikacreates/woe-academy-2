@@ -5,12 +5,45 @@ export default defineType({
   title: 'Site Settings',
   type: 'document',
   fieldsets: [
+    {name: 'branding', title: 'Branding / Logo', options: {collapsible: true}},
     {name: 'hero', title: 'Hero Section', options: {collapsible: true}},
     {name: 'about', title: 'About Section', options: {collapsible: true}},
     {name: 'programs', title: 'Programs Section', options: {collapsible: true}},
     {name: 'contact', title: 'Contact Section', options: {collapsible: true}},
+    {name: 'footer', title: 'Footer', options: {collapsible: true}},
   ],
   fields: [
+    // ── Branding / Logo ──
+    defineField({
+      name: 'logo',
+      title: 'Logo Image',
+      type: 'image',
+      description: 'Optional. If set, replaces the default SVG logo in the header and footer.',
+      options: {hotspot: true},
+      fieldset: 'branding',
+    }),
+    defineField({
+      name: 'logoAlt',
+      title: 'Logo Alt Text',
+      type: 'string',
+      description: 'Accessible description for the logo image (used when a logo image is uploaded).',
+      fieldset: 'branding',
+    }),
+    defineField({
+      name: 'headerTitle',
+      title: 'Header Title',
+      type: 'string',
+      description: 'Main brand text shown next to the logo in the header.',
+      fieldset: 'branding',
+    }),
+    defineField({
+      name: 'headerSubtitle',
+      title: 'Header Subtitle',
+      type: 'string',
+      description: 'Smaller tagline shown under the header title.',
+      fieldset: 'branding',
+    }),
+
     // ── Hero Section ──
     defineField({
       name: 'heroHeadline',
@@ -266,6 +299,88 @@ export default defineType({
       type: 'string',
       description: 'e.g. Irvine, Tustin Ranch & Woodbridge',
       fieldset: 'contact',
+    }),
+
+    // ── Footer ──
+    defineField({
+      name: 'footerBrandName',
+      title: 'Footer Brand Name',
+      type: 'string',
+      description: 'Main brand line in the footer (e.g. "World Of Explorers").',
+      fieldset: 'footer',
+    }),
+    defineField({
+      name: 'footerBrandSuffix',
+      title: 'Footer Brand Suffix',
+      type: 'string',
+      description: 'Smaller line under brand name (e.g. "Academy").',
+      fieldset: 'footer',
+    }),
+    defineField({
+      name: 'footerTagline',
+      title: 'Footer Tagline',
+      type: 'text',
+      rows: 2,
+      description: 'Short description shown under the footer brand.',
+      fieldset: 'footer',
+    }),
+    defineField({
+      name: 'footerQuickLinksHeading',
+      title: 'Quick Links Heading',
+      type: 'string',
+      fieldset: 'footer',
+    }),
+    defineField({
+      name: 'footerQuickLinks',
+      title: 'Quick Links',
+      type: 'array',
+      fieldset: 'footer',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({name: 'label', title: 'Label', type: 'string'}),
+            defineField({name: 'href', title: 'URL / Path', type: 'string'}),
+          ],
+          preview: {
+            select: {title: 'label', subtitle: 'href'},
+          },
+        },
+      ],
+    }),
+    defineField({
+      name: 'footerProgramsHeading',
+      title: 'Programs List Heading',
+      type: 'string',
+      fieldset: 'footer',
+    }),
+    defineField({
+      name: 'footerPrograms',
+      title: 'Programs List',
+      type: 'array',
+      fieldset: 'footer',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({name: 'text', title: 'Text', type: 'string'}),
+          ],
+          preview: {select: {title: 'text'}},
+        },
+      ],
+    }),
+    defineField({
+      name: 'footerContactHeading',
+      title: 'Contact Heading',
+      type: 'string',
+      fieldset: 'footer',
+    }),
+    defineField({
+      name: 'footerCopyright',
+      title: 'Copyright Line',
+      type: 'string',
+      description: 'Use {year} to insert the current year automatically.',
+      fieldset: 'footer',
     }),
   ],
   preview: {

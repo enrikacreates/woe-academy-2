@@ -1,17 +1,65 @@
 ---
 import Logo from './Logo.astro';
 
+interface QuickLink {
+  _key?: string;
+  label?: string;
+  href?: string;
+}
+
+interface ProgramItem {
+  _key?: string;
+  text?: string;
+}
+
 interface Props {
+  logoImage?: string;
+  logoAlt?: string;
+  brandName?: string;
+  brandSuffix?: string;
+  tagline?: string;
+  quickLinksHeading?: string;
+  quickLinks?: QuickLink[];
+  programsHeading?: string;
+  programs?: ProgramItem[];
+  contactHeading?: string;
   phone?: string;
   email?: string;
   address?: string;
+  copyright?: string;
 }
 
 const {
+  logoImage,
+  logoAlt,
+  brandName = "World Of Explorers",
+  brandSuffix = "Academy",
+  tagline = "Irvine's premier childcare & afterschool program building confident, curious learners.",
+  quickLinksHeading = "Quick Links",
+  quickLinks = [
+    { label: "Home", href: "/" },
+    { label: "Programs", href: "/#programs" },
+    { label: "About Us", href: "/#about" },
+    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/#contact" },
+  ],
+  programsHeading = "Programs",
+  programs = [
+    { text: "Preschool (Ages 2-5)" },
+    { text: "Full-Day Care" },
+    { text: "Before/After School" },
+    { text: "Seasonal Camps" },
+    { text: "Ages 2-12 Years" },
+  ],
+  contactHeading = "Contact",
   phone = "(949) 555-0123",
   email = "info@woeacademy.com",
   address = "Serving Irvine, Tustin Ranch\n& Woodbridge, CA",
+  copyright = "© {year} World Of Explorers Academy. All rights reserved. | Licensed California Childcare Facility",
 } = Astro.props;
+
+const year = new Date().getFullYear();
+const copyrightText = copyright.replace(/\{year\}/g, String(year));
 ---
 
 <footer>
@@ -19,36 +67,32 @@ const {
     <div class="footer-grid">
       <div>
         <div class="footer-brand">
-          <Logo size="2.5rem" gradientId="footer-gradient" />
+          <Logo size="2.5rem" gradientId="footer-gradient" image={logoImage} alt={logoAlt} />
           <div>
-            <h3>World Of Explorers</h3>
-            <p>Academy</p>
+            <h3>{brandName}</h3>
+            <p>{brandSuffix}</p>
           </div>
         </div>
-        <p class="footer-text">Irvine's premier childcare & afterschool program building confident, curious learners.</p>
+        <p class="footer-text">{tagline}</p>
       </div>
       <div>
-        <h4>Quick Links</h4>
+        <h4>{quickLinksHeading}</h4>
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/#programs">Programs</a></li>
-          <li><a href="/#about">About Us</a></li>
-          <li><a href="/blog">Blog</a></li>
-          <li><a href="/#contact">Contact</a></li>
+          {quickLinks.map((link) => (
+            <li><a href={link.href}>{link.label}</a></li>
+          ))}
         </ul>
       </div>
       <div>
-        <h4>Programs</h4>
+        <h4>{programsHeading}</h4>
         <ul class="footer-text">
-          <li>Preschool (Ages 2-5)</li>
-          <li>Full-Day Care</li>
-          <li>Before/After School</li>
-          <li>Seasonal Camps</li>
-          <li>Ages 2-12 Years</li>
+          {programs.map((item) => (
+            <li>{item.text}</li>
+          ))}
         </ul>
       </div>
       <div>
-        <h4>Contact</h4>
+        <h4>{contactHeading}</h4>
         <ul class="footer-text">
           {address.split('\n').map((line: string) => <li>{line}</li>)}
           <li>{phone}</li>
@@ -57,7 +101,7 @@ const {
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; {new Date().getFullYear()} World Of Explorers Academy. All rights reserved. | Licensed California Childcare Facility</p>
+      <p>{copyrightText}</p>
     </div>
   </div>
 </footer>

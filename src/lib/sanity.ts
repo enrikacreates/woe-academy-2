@@ -15,6 +15,48 @@ export function urlFor(source: SanityImageSource) {
   return builder.image(source);
 }
 
+// Coerce null/empty-array into undefined so component destructure defaults apply.
+const u = <T>(v: T | null | undefined): T | undefined => {
+  if (v === null || v === undefined) return undefined;
+  if (Array.isArray(v) && v.length === 0) return undefined;
+  return v;
+};
+
+export async function getChromeProps() {
+  const settings = await sanityClient.fetch(queries.siteSettings);
+  const logoImage = settings?.logo ? urlFor(settings.logo).width(200).quality(90).url() : undefined;
+  const footerAddress = settings?.address
+    ? `${settings.address}${settings.serviceAreas ? '\n' + settings.serviceAreas : ''}`
+    : undefined;
+
+  return {
+    settings,
+    logoImage,
+    headerProps: {
+      logoImage,
+      logoAlt: u(settings?.logoAlt),
+      title: u(settings?.headerTitle),
+      subtitle: u(settings?.headerSubtitle),
+    },
+    footerProps: {
+      logoImage,
+      logoAlt: u(settings?.logoAlt),
+      brandName: u(settings?.footerBrandName),
+      brandSuffix: u(settings?.footerBrandSuffix),
+      tagline: u(settings?.footerTagline),
+      quickLinksHeading: u(settings?.footerQuickLinksHeading),
+      quickLinks: u(settings?.footerQuickLinks),
+      programsHeading: u(settings?.footerProgramsHeading),
+      programs: u(settings?.footerPrograms),
+      contactHeading: u(settings?.footerContactHeading),
+      phone: u(settings?.phone),
+      email: u(settings?.email),
+      address: footerAddress,
+      copyright: u(settings?.footerCopyright),
+    },
+  };
+}
+
 // GROQ queries
 export const queries = {
   allPosts: `*[_type == "blogPost"] | order(publishedAt desc) {
@@ -39,6 +81,10 @@ export const queries = {
   }`,
 
   siteSettings: `*[_type == "siteSettings"][0] {
+    logo,
+    logoAlt,
+    headerTitle,
+    headerSubtitle,
     heroHeadline,
     heroDescription,
     heroImage,
@@ -65,6 +111,15 @@ export const queries = {
     email,
     address,
     serviceAreas,
-    hours
+    hours,
+    footerBrandName,
+    footerBrandSuffix,
+    footerTagline,
+    footerQuickLinksHeading,
+    footerQuickLinks[]{ _key, label, href },
+    footerProgramsHeading,
+    footerPrograms[]{ _key, text },
+    footerContactHeading,
+    footerCopyright
   }`,
 };

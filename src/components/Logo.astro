@@ -2,30 +2,41 @@
 interface Props {
   size?: string;
   gradientId?: string;
+  image?: string;
+  alt?: string;
 }
-const { size = "3rem", gradientId = "gradient" } = Astro.props;
+const {
+  size = "3rem",
+  gradientId = "gradient",
+  image,
+  alt = "World Of Explorers Academy logo",
+} = Astro.props;
 ---
 
-<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={`width: ${size}; height: ${size};`}>
-  <circle cx="50" cy="50" r="45" fill="#14B8A6" />
-  <circle cx="50" cy="50" r="45" fill={`url(#${gradientId})`} opacity="0.3" />
-  <ellipse cx="50" cy="50" rx="45" ry="20" fill="none" stroke="#0D9488" stroke-width="2" />
-  <ellipse cx="50" cy="50" rx="45" ry="35" fill="none" stroke="#0D9488" stroke-width="1.5" opacity="0.6" />
-  <line x1="5" y1="50" x2="95" y2="50" stroke="#0D9488" stroke-width="2" />
-  <line x1="50" y1="5" x2="50" y2="95" stroke="#0D9488" stroke-width="2" />
-  <path d="M 30 35 Q 25 30 30 25 Q 35 28 40 25 Q 42 30 38 35 Q 33 37 30 35 Z" fill="#5EEAD4" />
-  <path d="M 55 40 Q 50 35 55 30 Q 65 32 70 28 Q 73 35 68 42 Q 60 45 55 40 Z" fill="#5EEAD4" />
-  <path d="M 35 60 Q 30 55 35 50 Q 45 52 50 48 Q 55 55 48 62 Q 40 63 35 60 Z" fill="#5EEAD4" />
-  <path d="M 15 15 L 17 20 L 22 20 L 18 23 L 20 28 L 15 25 L 10 28 L 12 23 L 8 20 L 13 20 Z" fill="#FBBF24" />
-  <path d="M 85 20 L 87 25 L 92 25 L 88 28 L 90 33 L 85 30 L 80 33 L 82 28 L 78 25 L 83 25 Z" fill="#FBBF24" />
-  <path d="M 10 75 L 12 80 L 17 80 L 13 83 L 15 88 L 10 85 L 5 88 L 7 83 L 3 80 L 8 80 Z" fill="#F59E0B" />
-  <path d="M 88 70 L 90 75 L 95 75 L 91 78 L 93 83 L 88 80 L 83 83 L 85 78 L 81 75 L 86 75 Z" fill="#F59E0B" />
-  <line x1="50" y1="5" x2="50" y2="20" stroke="#0D9488" stroke-width="2" />
-  <path d="M 50 8 L 65 10 L 65 16 L 50 14 Z" fill="#FBBF24" />
-  <defs>
-    <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#5EEAD4" />
-      <stop offset="100%" stop-color="#14B8A6" />
-    </linearGradient>
-  </defs>
-</svg>
+{image ? (
+  <img src={image} alt={alt} style={`width: ${size}; height: ${size}; object-fit: contain;`} />
+) : (
+  <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={`width: ${size}; height: ${size};`}>
+    <circle cx="50" cy="50" r="45" fill="#14B8A6" />
+    <circle cx="50" cy="50" r="45" fill={`url(#${gradientId})`} opacity="0.3" />
+    <ellipse cx="50" cy="50" rx="45" ry="20" fill="none" stroke="#0D9488" stroke-width="2" />
+    <ellipse cx="50" cy="50" rx="45" ry="35" fill="none" stroke="#0D9488" stroke-width="1.5" opacity="0.6" />
+    <line x1="5" y1="50" x2="95" y2="50" stroke="#0D9488" stroke-width="2" />
+    <line x1="50" y1="5" x2="50" y2="95" stroke="#0D9488" stroke-width="2" />
+    <path d="M 30 35 Q 25 30 30 25 Q 35 28 40 25 Q 42 30 38 35 Q 33 37 30 35 Z" fill="#5EEAD4" />
+    <path d="M 55 40 Q 50 35 55 30 Q 65 32 70 28 Q 73 35 68 42 Q 60 45 55 40 Z" fill="#5EEAD4" />
+    <path d="M 35 60 Q 30 55 35 50 Q 45 52 50 48 Q 55 55 48 62 Q 40 63 35 60 Z" fill="#5EEAD4" />
+    <path d="M 15 15 L 17 20 L 22 20 L 18 23 L 20 28 L 15 25 L 10 28 L 12 23 L 8 20 L 13 20 Z" fill="#FBBF24" />
+    <path d="M 85 20 L 87 25 L 92 25 L 88 28 L 90 33 L 85 30 L 80 33 L 82 28 L 78 25 L 83 25 Z" fill="#FBBF24" />
+    <path d="M 10 75 L 12 80 L 17 80 L 13 83 L 15 88 L 10 85 L 5 88 L 7 83 L 3 80 L 8 80 Z" fill="#F59E0B" />
+    <path d="M 88 70 L 90 75 L 95 75 L 91 78 L 93 83 L 88 80 L 83 83 L 85 78 L 81 75 L 86 75 Z" fill="#F59E0B" />
+    <line x1="50" y1="5" x2="50" y2="20" stroke="#0D9488" stroke-width="2" />
+    <path d="M 50 8 L 65 10 L 65 16 L 50 14 Z" fill="#FBBF24" />
+    <defs>
+      <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#5EEAD4" />
+        <stop offset="100%" stop-color="#14B8A6" />
+      </linearGradient>
+    </defs>
+  </svg>
+)}

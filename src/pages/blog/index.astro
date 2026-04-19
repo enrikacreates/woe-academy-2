@@ -2,18 +2,21 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { sanityClient, queries, urlFor } from '../../lib/sanity';
+import { sanityClient, queries, urlFor, getChromeProps } from '../../lib/sanity';
 
 export const prerender = false;
 
-const posts = await sanityClient.fetch(queries.allPosts);
+const [posts, { headerProps, footerProps }] = await Promise.all([
+  sanityClient.fetch(queries.allPosts),
+  getChromeProps(),
+]);
 ---
 
 <Layout
   title="Blog | World Of Explorers Academy"
   description="Tips, activities, and insights for families from the World Of Explorers Academy team."
 >
-  <Header />
+  <Header {...headerProps} />
   <main>
     <section class="blog-hero">
       <div class="container">
@@ -70,7 +73,7 @@ const posts = await sanityClient.fetch(queries.allPosts);
       </div>
     </section>
   </main>
-  <Footer />
+  <Footer {...footerProps} />
 </Layout>
 
 <style>

@@ -6,18 +6,13 @@ import About from '../components/About.astro';
 import Programs from '../components/Programs.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
-import { sanityClient, urlFor, queries } from '../lib/sanity';
+import { urlFor, getChromeProps } from '../lib/sanity';
 
-const settings = await sanityClient.fetch(queries.siteSettings);
+const { settings, headerProps, footerProps } = await getChromeProps();
 
 // Build image URLs from Sanity if available
 const heroImage = settings?.heroImage ? urlFor(settings.heroImage).width(1080).quality(80).url() : undefined;
 const aboutImage = settings?.aboutImage ? urlFor(settings.aboutImage).width(1080).quality(80).url() : undefined;
-
-// Format address for footer (multiline)
-const footerAddress = settings?.address
-  ? `${settings.address}${settings.serviceAreas ? '\n' + settings.serviceAreas : ''}`
-  : undefined;
 ---
 
 <Layout
@@ -25,7 +20,7 @@ const footerAddress = settings?.address
   description="Serving families in Irvine, Tustin Ranch & Woodbridge with enriching full-day care, afterschool programs, and seasonal camps for ages 2-12 years."
   image={heroImage}
 >
-  <Header />
+  <Header {...headerProps} />
   <main>
     <Hero
       headline={settings?.heroHeadline}
@@ -62,9 +57,5 @@ const footerAddress = settings?.address
       sectionDescription={settings?.contactSectionDescription}
     />
   </main>
-  <Footer
-    phone={settings?.phone}
-    email={settings?.email}
-    address={footerAddress}
-  />
+  <Footer {...footerProps} />
 </Layout>

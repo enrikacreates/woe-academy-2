@@ -1,15 +1,29 @@
 ---
 import Logo from './Logo.astro';
+
+interface Props {
+  logoImage?: string;
+  logoAlt?: string;
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  logoImage,
+  logoAlt,
+  title = "World Of Explorers Academy",
+  subtitle = "Childcare & Afterschool Program",
+} = Astro.props;
 ---
 
 <header>
   <div class="container">
     <div class="header-content">
       <a href="/" class="logo-section" style="text-decoration: none;">
-        <Logo size="3rem" gradientId="header-gradient" />
+        <Logo size="3rem" gradientId="header-gradient" image={logoImage} alt={logoAlt} />
         <div class="logo-text">
-          <h1>World Of Explorers Academy</h1>
-          <p>Childcare & Afterschool Program</p>
+          <h1>{title}</h1>
+          <p>{subtitle}</p>
         </div>
       </a>
       <nav>

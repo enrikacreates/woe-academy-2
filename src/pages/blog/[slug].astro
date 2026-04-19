@@ -2,13 +2,16 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { sanityClient, queries, urlFor } from '../../lib/sanity';
+import { sanityClient, queries, urlFor, getChromeProps } from '../../lib/sanity';
 import { PortableText } from '@portabletext/react';
 
 export const prerender = false;
 
 const { slug } = Astro.params;
-const post = await sanityClient.fetch(queries.postBySlug, { slug });
+const [post, { headerProps, footerProps }] = await Promise.all([
+  sanityClient.fetch(queries.postBySlug, { slug }),
+  getChromeProps(),
+]);
 
 if (!post) {
   return Astro.redirect('/blog');
@@ -19,7 +22,7 @@ if (!post) {
   title={`${post.title} | W.O.E. Academy Blog`}
   description={post.excerpt ?? `Read ${post.title} on the W.O.E. Academy blog.`}
 >
-  <Header />
+  <Header {...headerProps} />
   <main>
     <article class="blog-post">
       {post.mainImage && (
@@ -61,7 +64,7 @@ if (!post) {
       </div>
     </article>
   </main>
-  <Footer />
+  <Footer {...footerProps} />
 </Layout>
 
 <script>
