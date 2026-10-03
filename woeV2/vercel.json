@@ -1,0 +1,4 @@
+{
+  "framework": "vite",
+  "rewrites": [{ "source": "/((?!assets/|favicon).*)", "destination": "/index.html" }]
+}

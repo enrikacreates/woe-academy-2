@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 45 55% 95%;
+        --foreground: 150 15% 14%;
+        --card: 0 0% 100%;
+        --card-foreground: 150 15% 14%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 150 15% 14%;
+        --primary: 168 74% 21%;
+        --primary-foreground: 45 55% 95%;
+        --secondary: 46 89% 61%;
+        --secondary-foreground: 150 15% 14%;
+        --muted: 45 30% 90%;
+        --muted-foreground: 150 10% 40%;
+        --accent: 46 89% 61%;
+        --accent-foreground: 150 15% 14%;
+        --destructive: 8 85% 63%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 168 30% 85%;
+        --input: 168 30% 82%;
+        --ring: 168 74% 21%;
+        --radius: 1rem;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    html.lenis, html.lenis body {
+        height: auto;
+    }
+    .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+    }
+    body {
+        @apply bg-cream text-ink font-sans antialiased;
+        overflow-x: hidden;
+    }
+    ::selection {
+        background: #F5C242;
+        color: #0E5E50;
+    }
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+
+    [data-debug-wrapper="true"] > * {
+        margin-left: inherit;
+        margin-right: inherit;
+        margin-top: inherit;
+        margin-bottom: inherit;
+        padding-left: inherit;
+        padding-right: inherit;
+        padding-top: inherit;
+        padding-bottom: inherit;
+        column-gap: inherit;
+        row-gap: inherit;
+        gap: inherit;
+        border-left-width: inherit;
+        border-right-width: inherit;
+        border-top-width: inherit;
+        border-bottom-width: inherit;
+        border-left-style: inherit;
+        border-right-style: inherit;
+        border-top-style: inherit;
+        border-bottom-style: inherit;
+        border-left-color: inherit;
+        border-right-color: inherit;
+        border-top-color: inherit;
+        border-bottom-color: inherit;
+    }
+}
+
+@layer utilities {
+    .text-outline {
+        -webkit-text-stroke: 2px #0E5E50;
+        color: transparent;
+    }
+    .grain::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+}
