@@ -5,32 +5,49 @@ Emergent), moved to a standard Vite + React project so it can be hosted on
 Vercel.
 
 - `src/` is the original component source, recovered from the live build.
-  Only two things changed: the entry files were renamed for Vite
-  (`index.js` → `main.jsx`, `App.js` → `App.jsx`), and the backend URL is now
-  read from `VITE_BACKEND_URL` instead of `REACT_APP_BACKEND_URL`.
+  The entry files were renamed for Vite (`index.js` → `main.jsx`,
+  `App.js` → `App.jsx`), and the forms now post to this project's own `/api`.
 - `tailwind.config.js` was rebuilt from the original compiled CSS.
 - `lucide-react` is pinned to `0.524.0`, the release whose icons match the
   live site exactly.
 
 Rendered side by side with the original build, every page (home, programs,
-quote, admin and the call popup) is pixel-identical at 1440px and 390px wide.
+quote and the call popup) is pixel-identical at 1440px and 390px wide.
 
 ## Pages
 
-| Route       | What it is                                       |
-| ----------- | ------------------------------------------------ |
+| Route       | What it is                                          |
+| ----------- | --------------------------------------------------- |
 | `/`         | Landing page, booking form, "talk it through" popup |
-| `/programs` | Full programs & experiences menu                 |
-| `/quote`    | Quote questionnaire                              |
-| `/admin`    | Owner login to view meeting and quote requests   |
+| `/programs` | Full programs & experiences menu                    |
+| `/quote`    | Quote questionnaire                                 |
 
-## Backend
+The original `/admin` dashboard was removed: submissions now arrive by email.
 
-The booking form (`POST /api/inquiries`), quote form (`POST /api/quotes`) and
-admin page (`/api/auth/*`, `/api/admin/*`) talk to the Emergent backend at
-`VITE_BACKEND_URL` (see `.env.example`). That backend is served from the
-worldofexplorers.com domain, so it needs a replacement before the domain is
-pointed at this project.
+## Forms
+
+The booking form posts to `api/inquiries.js` and the quote form to
+`api/quotes.js`, two Vercel functions that send email through
+[Resend](https://resend.com). Each submission sends:
+
+1. a notification to `FORM_TO_EMAIL`, with Reply-To set to the visitor so
+   replying goes straight to them, and
+2. a short confirmation to the visitor (best effort: if it fails, the
+   submission still succeeds).
+
+Both forms carry a hidden `company_website` field. Bots that fill it in get
+a fake success and no email is sent.
+
+Set these in the Vercel project (see `.env.example`):
+
+| Variable          | Example                                            |
+| ----------------- | -------------------------------------------------- |
+| `RESEND_API_KEY`  | `re_...` from resend.com/api-keys                  |
+| `FORM_TO_EMAIL`   | `connect@worldofexplorers.com` (comma-separate several) |
+| `FORM_FROM_EMAIL` | `World of Explorers <hello@worldofexplorers.com>`  |
+
+The sender's domain must be verified in Resend (DNS records added at
+Namecheap) before emails can go to anyone other than the Resend account owner.
 
 ## Commands
 
@@ -42,9 +59,6 @@ npm run build    # production build in dist/
 
 ## Deploying on Vercel
 
-Create a Vercel project from this repository with **Root Directory** set to
-`woeV2`. `VITE_BACKEND_URL` defaults to `https://worldofexplorers.com`
-(see `vite.config.js`); set it in the project's environment variables to
-point the forms somewhere else.
-`vercel.json` adds the SPA rewrite so `/programs`, `/quote` and `/admin` load
-directly.
+The `woev2` Vercel project builds this folder (Root Directory `woeV2`).
+`vercel.json` adds the SPA rewrite so `/programs` and `/quote` load directly,
+while `/api/*` goes to the functions.

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Phone, Mail, Instagram, CalendarCheck, CheckCircle2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
-const API = `${import.meta.env.VITE_BACKEND_URL}/api`;
+const API = "/api";
 
 const inputCls = "w-full rounded-xl border-2 border-teal/15 bg-cream/60 px-4 py-3 text-sm font-medium text-ink placeholder:text-ink/40 focus:outline-none focus:border-teal transition-colors duration-300";
 
@@ -41,6 +41,7 @@ export const Booking = ({ prefill }) => {
         interest: form.interest || null,
         preferred_date: form.preferred_date || null,
         message: form.message.trim() || null,
+        company_website: e.target.company_website?.value || undefined,
       });
       setDone(true);
       toast.success("Request received — we'll be in touch soon!");
@@ -183,6 +184,8 @@ export const Booking = ({ prefill }) => {
                 {busy ? "Sending…" : "Request My 15-Min Call"}
               </motion.button>
               <p className="text-[11px] text-ink/45 text-center">No spam, ever. We reply within 1–2 business days.</p>
+              {/* Spam trap: hidden from people, filled in by bots. */}
+              <input type="text" name="company_website" tabIndex={-1} autoComplete="off" hidden aria-hidden="true" />
             </form>
           )}
         </motion.div>

@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Lenis from "lenis";
 import { Toaster } from "sonner";
 import Landing from "@/pages/Landing";
-import Admin from "@/pages/Admin";
 import ProgramsMenu from "@/pages/ProgramsMenu";
 import Quote from "@/pages/Quote";
 
@@ -32,7 +31,6 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/programs" element={<ProgramsMenu />} />
           <Route path="/quote" element={<Quote />} />
-          <Route path="/admin" element={<Admin />} />
         </Routes>
       </BrowserRouter>
       <Toaster position="top-center" richColors />

@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { Logo } from "@/components/Logo";
 import { MENU } from "@/data/menu";
 
-const API = `${import.meta.env.VITE_BACKEND_URL}/api`;
+const API = "/api";
 
 const inputCls = "w-full rounded-xl border-2 border-teal/15 bg-cream/60 px-4 py-3 text-sm font-medium text-ink placeholder:text-ink/40 focus:outline-none focus:border-teal transition-colors duration-300";
 const labelCls = "block text-xs font-bold uppercase tracking-wider text-ink/60 mb-1.5";
@@ -59,6 +59,7 @@ export default function Quote() {
       payload.email = form.email.trim();
       payload.contact_pref = form.contact_pref;
       payload.program = form.program;
+      payload.company_website = e.target.company_website?.value || undefined;
       await axios.post(`${API}/quotes`, payload);
       setDone(true);
       toast.success("Quote request sent — we'll be in touch soon!");
@@ -232,6 +233,8 @@ export default function Quote() {
                 <p className="text-[11px] text-coral text-center font-semibold -mt-4" data-testid="quote-contact-required-hint">Pick email, text or call above so we know how to reach you</p>
               )}
               <p className="text-[11px] text-ink/45 text-center">No spam, ever. Your answers go straight to Brayson &amp; Adazjia.</p>
+              {/* Spam trap: hidden from people, filled in by bots. */}
+              <input type="text" name="company_website" tabIndex={-1} autoComplete="off" hidden aria-hidden="true" />
             </form>
           )}
         </motion.div>
